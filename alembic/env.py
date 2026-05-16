@@ -5,12 +5,12 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from app.db.base import Base
-from app.models.role_model import RoleModel
-from app.models.permission_model import PermissionModel
+from app.models.role_model import RolesModel
+from app.models.permission_model import PermissionsModel
 from app.models.user_model import UserModel
 from app.models.session_model import SessionModel
 from app.models.resource_model import ResourcesModel
-from app.models.user_roles_model import UserRolesModel
+# from app.models.user_roles_model import UsersRolesModel
 
 from alembic import context
 

@@ -17,5 +17,9 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
 async def get_db_session_autocommit(
         session: AsyncSession = Depends(get_db_session)
 ) -> AsyncGenerator[AsyncSession, None]:
-    yield session
-    await session.commit()
+    try:
+        yield session
+        await session.commit()
+    except Exception as e:
+        await session.rollback()
+        raise e

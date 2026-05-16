@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr
 
 
 class UserLoginSchema(BaseModel):
@@ -12,6 +12,11 @@ class UserRegisterSchema(UserLoginSchema):
     patronymic: str | None = None
 
 
-class UserResponseSchema(UserLoginSchema):
+class UserWithIdSchema(UserLoginSchema):
     id: int | None = None
+
+
+class UserResponseSchema(UserRegisterSchema):
+    id: int | None = None
+    role_id: str | None = None
     is_active: bool | None = None

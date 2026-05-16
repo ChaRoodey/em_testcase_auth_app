@@ -10,7 +10,9 @@ from app.core.security import security
 from app.schemas.user_schema import UserRegisterSchema, UserLoginSchema
 from app.models.session_model import SessionModel
 
-auth_router = APIRouter()
+auth_router = APIRouter(
+    tags=["auth"],
+)
 
 
 def _set_session_cookie(response: Response, token: str):
@@ -31,16 +33,13 @@ async def login(
         response: Response,
         session: AsyncSession = Depends(get_db_session_autocommit)
 ):
-    try:
-        res = await session.execute(select(UserModel).filter_by(email=data.email))
-        user = res.scalars().one_or_none()
-    except Exception:
-        raise
+    res = await session.execute(select(UserModel).filter_by(email=data.email))
+    user = res.scalars().one_or_none()
 
-    if not user:
-        raise HTTPException(status_code=401, detail="Wrong login/password")
+    # if not user.is_active:
+    #     raise HTTPException(status_code=401, detail="User inactive or deleted")
 
-    if not security.verify_password(data.password, user.password):
+    if not user or not user.is_active or not security.verify_password(data.password, user.password):
         raise HTTPException(status_code=401, detail="Wrong login/password")
 
     session_obj = await create_session(user.id, session)
@@ -58,13 +57,8 @@ async def register(
     data = req.model_dump()
     data['password'] = security.hash_password(data['password'])
 
-    try:
-        new_user = UserModel(**data)
-        session.add(new_user)
-        await session.commit()
-    except Exception as e:
-        print(e)
-        raise
+    new_user = UserModel(**data)
+    session.add(new_user)
 
     return {"success": True}
 
