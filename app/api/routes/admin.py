@@ -3,12 +3,12 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.scripts import db_patch_users, db_get_users, db_delete_user, db_get_permissions, check_ownership, \
+from app.db.scripts import db_patch_users, db_get_users, db_delete_user, db_get_permissions, \
     db_delete_permission, db_add_permission, db_patch_permission
 from app.db.session import get_db_session_autocommit
 from app.api.deps import require_permission
 from app.schemas.permission_schema import PermissionAddSchema, PermissionEditSchema
-from app.schemas.user_schema import UserRegisterSchema, UserWithIdSchema
+from app.schemas.user_schema import UserWithIdSchema
 
 admin_router = APIRouter(
     prefix="/admin",

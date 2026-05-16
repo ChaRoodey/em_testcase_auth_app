@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import require_permission
-from app.db.base import Base
 from app.db.scripts import db_patch_users, db_get_users, db_delete_user, check_ownership
 from app.db.session import get_db_session_autocommit
 from app.schemas.user_schema import UserWithIdSchema
